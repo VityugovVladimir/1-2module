@@ -1,0 +1,8 @@
+SELECT 
+  COALESCE(ROUND(
+    SUM(CheckOutDate - CheckInDate) * 100.0 / 
+    (COUNT(DISTINCT RoomFund.RoomFundId) * (MAX(CheckOutDate) - MIN(CheckInDate) + 1)), 2
+  ), 0) AS load_percentage
+FROM Booking
+JOIN RoomFund ON Booking.RoomFundId = RoomFund.RoomFundId
+WHERE RoomFund.StatusId = (SELECT StatusId FROM Status WHERE Name = 'Занят'); 
